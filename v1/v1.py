@@ -36,9 +36,9 @@ def search_task(tasks):
     else:
         print("No matching tasks found.")
 
-def exit_app(a):
+def exit_app(tasks):
     with open("tasks.json", "w") as b:
-        json.dump(a, b)
+        json.dump(tasks, b)
     print("Exiting the app.")
 
 def main():
