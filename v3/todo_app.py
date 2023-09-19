@@ -1,11 +1,15 @@
 import json
 
-# 할일을 추가 
-# 형식은 {'description': XXX , 'done': True/False}
+
 def add_task(tasks, desc):
+    """
+    할일을 추가
+    형식은 {'description': XXX , 'done': True/False}
+    """
     tasks.append({"description": desc, "done": False})
     save_tasks_json(tasks)
     print("Task added!")
+
 
 def list_tasks(tasks):
     print("\nTask List:")
@@ -13,9 +17,12 @@ def list_tasks(tasks):
         status = "Done" if task["done"] else "Not Done"
         print(f"{num}. [{status}] {task['description']}")
 
-# 할일 완료
-# 'done' 속성을 True로 변경 
+
 def done_task(tasks, num):
+    """
+    할일 완료
+    'done' 속성을 True로 변경
+    """
     if 0 <= num < len(tasks):
         tasks[num]["done"] = True
         with open("tasks.json", "w") as b:
@@ -24,9 +31,12 @@ def done_task(tasks, num):
     else:
         print("Invalid task number.")
 
-# 할일 검색 
-# 'description' 속성을 검색 
+
 def search_task(tasks, keyword):
+    """
+    할일 검색
+    'description' 속성을 검색
+    """
     searched = []
     for task in tasks:
         if keyword.lower() in task["description"].lower():
@@ -38,13 +48,16 @@ def search_task(tasks, keyword):
     else:
         print("No matching tasks found.")
 
+
 def exit_app(tasks):
     save_tasks_json(tasks)
     print("Exiting the app.")
 
+
 def save_tasks_json(tasks):
     with open("tasks.json", "w") as b:
         json.dump(tasks, b)
+
 
 def load_tasks():
     tasks = []
@@ -56,9 +69,11 @@ def load_tasks():
         pass
     return tasks
 
+
 def clear_tasks():
     tasks = []
     save_tasks_json(tasks)
+
 
 def main():
     tasks = load_tasks()
@@ -89,7 +104,8 @@ def main():
         else:
             print("Invalid choice. Please choose a valid option.")
 
-        save_tasks_json(tasks) 
+        save_tasks_json(tasks)
+
 
 if __name__ == "__main__":
     main()
