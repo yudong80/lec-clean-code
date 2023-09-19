@@ -1,36 +1,39 @@
 import json
+from task import Task
 
-# 할일을 추가 
-# 형식은 {'description': XXX , 'done': True/False}
+
 def add_task(tasks, desc):
-    tasks.append({"description": desc, "done": False})
+    # 할일을 추가
+    # 형식은 {'description': XXX , 'done': True/False}
+    tasks.append(Task(desc))
     save_tasks_json(tasks)
     print("Task added!")
+
 
 def list_tasks(tasks):
     print("\nTask List:")
     for num, task in enumerate(tasks, start=1):
-        status = "Done" if task["done"] else "Not Done"
-        print(f"{num}. [{status}] {task['description']}")
+        print(f"{num}. {task}")
 
-# 할일 완료
-# 'done' 속성을 True로 변경 
+
 def done_task(tasks, num):
+    # 할일 완료
+    # 'done' 속성을 True로 변경
     if 0 <= num < len(tasks):
-        tasks[num]["done"] = True
-        with open("tasks.json", "w") as b:
-            json.dump(tasks, b)
+        tasks[num].mark_as_done()
+        save_tasks_json(tasks)
         print("Task marked as done!")
     else:
         print("Invalid task number.")
 
-# 할일 검색 
-# 'description' 속성을 검색 
+
 def search_task(tasks, keyword):
+    # 할일 검색
+    # 'description' 속성을 검색
     searched = []
     for task in tasks:
-        if keyword.lower() in task["description"].lower():
-            searched.append(task["description"])
+        if keyword.lower() in task.description.lower():
+            searched.append(task)
     if searched:
         print("\nMatching tasks:")
         for num, task in enumerate(searched, start=1):
@@ -38,27 +41,35 @@ def search_task(tasks, keyword):
     else:
         print("No matching tasks found.")
 
+
 def exit_app(tasks):
     save_tasks_json(tasks)
     print("Exiting the app.")
 
+
 def save_tasks_json(tasks):
     with open("tasks.json", "w") as b:
-        json.dump(tasks, b)
+        json.dump([vars(task) for task in tasks], b)
+
 
 def load_tasks():
     tasks = []
 
     try:
         with open("tasks.json", "r") as b:
-            tasks = json.load(b)
+            tasks_data = json.load(b)
+            for task_data in tasks_data:
+                task = Task(**task_data)
+                tasks.append(task)
     except FileNotFoundError:
         pass
     return tasks
 
+
 def clear_tasks():
     tasks = []
     save_tasks_json(tasks)
+
 
 def main():
     tasks = load_tasks()
@@ -81,15 +92,14 @@ def main():
             num = int(input("Enter task number to mark as done: ")) - 1
             done_task(tasks, num)
         elif select == "4":
-            keyword = input("Enter keyword to search for: ")
+            keyword = input("Enter search keyword: ")
             search_task(tasks, keyword)
         elif select == "5":
             exit_app(tasks)
             break
         else:
-            print("Invalid choice. Please choose a valid option.")
+            print("Invalid choice.")
 
-        save_tasks_json(tasks) 
 
 if __name__ == "__main__":
     main()
