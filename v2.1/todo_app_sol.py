@@ -1,15 +1,18 @@
 import json
 
+
 def add_task(tasks, desc):
     tasks.append({"description": desc, "done": False})
     save_tasks_json(tasks)
     print("Task added!")
+
 
 def list_tasks(tasks):
     print("\nTask List:")
     for num, task in enumerate(tasks, start=1):
         status = "Done" if task["done"] else "Not Done"
         print(f"{num}. [{status}] {task['description']}")
+
 
 def done_task(tasks, num):
     if 0 <= num < len(tasks):
@@ -18,6 +21,7 @@ def done_task(tasks, num):
         print("Task marked as done!")
     else:
         print("Invalid task number.")
+
 
 def search_task(tasks, keyword):
     searched = []
@@ -31,13 +35,16 @@ def search_task(tasks, keyword):
     else:
         print("No matching tasks found.")
 
+
 def exit_app(tasks):
     save_tasks_json(tasks)
     print("Exiting the app.")
 
+
 def save_tasks_json(tasks):
     with open("tasks.json", "w") as b:
         json.dump(tasks, b)
+
 
 def load_tasks():
     tasks = []
@@ -48,6 +55,7 @@ def load_tasks():
     except FileNotFoundError:
         pass
     return tasks
+
 
 def main():
     tasks = load_tasks()
@@ -78,7 +86,8 @@ def main():
         else:
             print("Invalid choice. Please choose a valid option.")
 
-        save_tasks_json(tasks) 
+        save_tasks_json(tasks)
+
 
 if __name__ == "__main__":
     main()
