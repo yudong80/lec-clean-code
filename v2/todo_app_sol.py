@@ -16,8 +16,7 @@ def done_task(tasks):
     num = int(input("Enter task number to mark as done: ")) - 1
     if 0 <= num < len(tasks):
         tasks[num]["done"] = True
-        with open("tasks.json", "w") as b:
-            json.dump(tasks, b)
+        save_tasks_json(tasks)
         print("Task marked as done!")
     else:
         print("Invalid task number.")
