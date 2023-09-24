@@ -2,6 +2,10 @@ import json
 
 
 def add_task(tasks, desc):
+    """
+    할일을 추가
+    형식은 {'description': XXX , 'done': True/False}
+    """
     tasks.append({"description": desc, "done": False})
     save_tasks_json(tasks)
     print("Task added!")
@@ -15,6 +19,10 @@ def list_tasks(tasks):
 
 
 def done_task(tasks, num):
+    """
+    할일 완료
+    'done' 속성을 True로 변경
+    """
     if 0 <= num < len(tasks):
         tasks[num]["done"] = True
         save_tasks_json(tasks)
@@ -24,6 +32,10 @@ def done_task(tasks, num):
 
 
 def search_task(tasks, keyword):
+    """
+    할일 검색
+    'description' 속성을 검색
+    """
     searched = []
     for task in tasks:
         if keyword.lower() in task["description"].lower():
@@ -55,6 +67,11 @@ def load_tasks():
     except FileNotFoundError:
         pass
     return tasks
+
+
+def clear_tasks():
+    tasks = []
+    save_tasks_json(tasks)
 
 
 def main():
