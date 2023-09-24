@@ -1,7 +1,6 @@
 import json
 
-def add_task(tasks):
-    desc = input("Enter task description: ")
+def add_task(tasks, desc):
     tasks.append({"description": desc, "done": False})
     save_tasks_json(tasks)
     print("Task added!")
@@ -12,8 +11,7 @@ def list_tasks(tasks):
         status = "Done" if task["done"] else "Not Done"
         print(f"{num}. [{status}] {task['description']}")
 
-def done_task(tasks):
-    num = int(input("Enter task number to mark as done: ")) - 1
+def done_task(tasks, num):
     if 0 <= num < len(tasks):
         tasks[num]["done"] = True
         save_tasks_json(tasks)
@@ -21,8 +19,7 @@ def done_task(tasks):
     else:
         print("Invalid task number.")
 
-def search_task(tasks):
-    keyword = input("Enter keyword to search for: ")
+def search_task(tasks, keyword):
     searched = []
     for task in tasks:
         if keyword.lower() in task["description"].lower():
@@ -64,23 +61,20 @@ def main():
         print("5. Exit")
 
         select = input("Enter your choice: ")
-
         if select == "1":
-            add_task(tasks)
-
+            desc = input("Enter task description: ")
+            add_task(tasks, desc)
         elif select == "2":
             list_tasks(tasks)
-
         elif select == "3":
-            done_task(tasks)
-
+            num = int(input("Enter task number to mark as done: ")) - 1
+            done_task(tasks, num)
         elif select == "4":
-            search_task(tasks)
-
+            keyword = input("Enter keyword to search for: ")
+            search_task(tasks, keyword)
         elif select == "5":
             exit_app(tasks)
             break
-
         else:
             print("Invalid choice. Please choose a valid option.")
 
