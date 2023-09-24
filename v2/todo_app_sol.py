@@ -1,22 +1,21 @@
 import json
 
 def add_task(tasks):
-    d = input("Enter task description: ")
-    tasks.append({"description": d, "done": False})
-    with open("tasks.json", "w") as b:
-        json.dump(tasks, b)
+    desc = input("Enter task description: ")
+    tasks.append({"description": desc, "done": False})
+    save_tasks_json(tasks)
     print("Task added!")
 
 def list_tasks(tasks):
     print("\nTask List:")
-    for e, f in enumerate(tasks, start=1):
-        g = "Done" if f["done"] else "Not Done"
-        print(f"{e}. [{g}] {f['description']}")
+    for num, task in enumerate(tasks, start=1):
+        status = "Done" if task["done"] else "Not Done"
+        print(f"{num}. [{status}] {task['description']}")
 
 def done_task(tasks):
-    h = int(input("Enter task number to mark as done: ")) - 1
-    if 0 <= h < len(tasks):
-        tasks[h]["done"] = True
+    num = int(input("Enter task number to mark as done: ")) - 1
+    if 0 <= num < len(tasks):
+        tasks[num]["done"] = True
         with open("tasks.json", "w") as b:
             json.dump(tasks, b)
         print("Task marked as done!")
@@ -24,24 +23,27 @@ def done_task(tasks):
         print("Invalid task number.")
 
 def search_task(tasks):
-    i = input("Enter keyword to search for: ")
-    j = []
-    for k in tasks:
-        if i.lower() in k["description"].lower():
-            j.append(k["description"])
-    if j:
+    keyword = input("Enter keyword to search for: ")
+    searched = []
+    for task in tasks:
+        if keyword.lower() in task["description"].lower():
+            searched.append(task["description"])
+    if searched:
         print("\nMatching tasks:")
-        for e, l in enumerate(j, start=1):
-            print(f"{e}. {l}")
+        for num, task in enumerate(searched, start=1):
+            print(f"{num}. {task}")
     else:
         print("No matching tasks found.")
 
 def exit_app(tasks):
-    with open("tasks.json", "w") as b:
-        json.dump(tasks, b)
+    save_tasks_json(tasks)
     print("Exiting the app.")
 
-def main():
+def save_tasks_json(tasks):
+    with open("tasks.json", "w") as b:
+        json.dump(tasks, b)
+
+def load_tasks():
     tasks = []
 
     try:
@@ -49,6 +51,10 @@ def main():
             tasks = json.load(b)
     except FileNotFoundError:
         pass
+    return tasks
+
+def main():
+    tasks = load_tasks()
 
     while True:
         print("\nTo-Do App\n")
@@ -79,8 +85,7 @@ def main():
         else:
             print("Invalid choice. Please choose a valid option.")
 
-        with open("tasks.json", "w") as b:
-            json.dump(tasks, b)
+        save_tasks_json(tasks) 
 
 if __name__ == "__main__":
     main()
